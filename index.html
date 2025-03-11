@@ -1,85 +1,213 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Любовь к котикам</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #f8cdda, #1c92d2);
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 0.5em;
-    }
-    .cat-image {
-      display: block;
-      margin: 20px auto;
-      max-width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-    .button {
-      display: block;
-      width: 200px;
-      margin: 20px auto;
-      padding: 10px;
-      background-color: #ff6f61;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 1.2em;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .button:hover {
-      background-color: #ff3b2e;
-    }
-    .footer {
-      margin-top: 20px;
-      font-size: 0.9em;
-      color: #777;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Любовь к котикам</h1>
-    <p>Здесь вы можете получить уникальный код через API.</p>
-    <img src="https://placekitten.com/800/400" alt="Котик" class="cat-image">
-    
-    <button id="sendButton" class="button">Получить код</button>
-    <p id="codeDisplay"></p>
-
-    <iframe id="apiFrame" src="https://selek01.github.io/kotiki2/" style="display: none;"></iframe>
-    
-    <div class="footer">&copy; 2025 Любовь к котикам. Все права защищены.</div>
-  </div>
-  
-  <script>
-    document.getElementById('sendButton').addEventListener('click', function() {
-      const iframe = document.getElementById('apiFrame');
-      iframe.contentWindow.postMessage({ action: 'getCode' }, 'https://selek01.github.io/kotiki2/');
-    });
-    
-    window.addEventListener('message', function(event) {
-      if (event.origin !== 'https://selek01.github.io/kotiki2/' || event.data?.action !== 'sendCode') {
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <title>Любовь к котикам</title>
+    <style>
+      /* Стилизация фона, шрифтов и контейнера */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #f8cdda, #1c92d2);
+        color: #333;
       }
-      document.getElementById('codeDisplay').innerText = 'Ваш код: ' + event.data.data.code;
-    });
-  </script>
-</body>
+      .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+      }
+      h1 {
+        text-align: center;
+        font-size: 2.5em;
+        margin-bottom: 0.5em;
+      }
+      p {
+        font-size: 1.2em;
+        line-height: 1.6;
+      }
+      .cat-image {
+        display: block;
+        margin: 20px auto;
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      .input-field {
+        display: block;
+        width: 80%;
+        margin: 20px auto;
+        padding: 10px;
+        font-size: 1.2em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .button {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #ff6f61;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .button:hover {
+        background-color: #ff3b2e;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: #777;
+      }
+      /* Стили для React-компонента */
+      #apiIntegration {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Любовь к котикам</h1>
+      <p>
+        Добро пожаловать на наш сайт, где каждый день наполнен любовью к
+        милым котикам! Здесь вы найдете красивые фотографии, вдохновляющие
+        истории и даже возможность отправить частичку своей любви на другой сервер.
+      </p>
+      <img
+        src="https://placekitten.com/800/400"
+        alt="Красивая кошка"
+        class="cat-image"
+      />
+
+      <!-- Поле ввода для сообщения -->
+      <input
+        type="text"
+        id="loveInput"
+        class="input-field"
+        placeholder="Введите ваше сообщение"
+      />
+
+      <!-- Кнопка для отправки запроса -->
+      <button id="sendButton" class="button">Отправить любовь</button>
+
+      <div class="footer">
+        &copy; 2025 Любовь к котикам. Все права защищены.
+      </div>
+    </div>
+
+    <!-- Контейнер для React-компонента API интеграции -->
+    <div id="apiIntegration"></div>
+
+    <!-- Подключаем React, ReactDOM, Axios и Babel через CDN -->
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script>
+      // Обработчик для отправки JSON при клике на кнопку
+      document.getElementById("sendButton").addEventListener("click", function () {
+        const message = document.getElementById("loveInput").value;
+        const payload = { message: message };
+  
+        fetch("https://example.com/endpoint", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log("Response:", data);
+            // Можно добавить уведомление об успешной отправке
+          })
+          .catch(error => console.error("Error:", error));
+      });
+    </script>
+
+    <!-- React-код API интеграции, адаптированный из kotiki_api.js -->
+    <script type="text/babel">
+      const { useEffect, useRef, useState } = React;
+  
+      // Родительский компонент, содержащий iframe и обрабатывающий сообщения
+      function IFrameIntegration() {
+        const iframeRef = useRef(null);
+  
+        useEffect(() => {
+          const handleIFrameMessage = (event) => {
+            // Проверка происхождения сообщения, наличия iframe и нужного действия
+            if (
+              event.origin !== "https://selek01.github.io/kotiki2/" ||
+              !iframeRef.current ||
+              (event.data && event.data.action !== "getCode")
+            ) {
+              return;
+            }
+  
+            // Запрос к API для получения redirectUri через axios
+            axios
+              .get("/auth/marketplace/authorize", {
+                params: { marketplaceCode: "app_j3fcx0h6ex9dhfcu0dchrf82byc2uv6a" }
+              })
+              .then((response) => {
+                const redirectUri = response.data.redirectUri;
+                const code = new URL(redirectUri).searchParams.get("code");
+                const message = {
+                  action: "sendCode",
+                  data: { code }
+                };
+                // Отправка кода обратно в iframe
+                iframeRef.current.contentWindow.postMessage(message, event.origin);
+              })
+              .catch((err) => console.error(err));
+          };
+  
+          window.addEventListener("message", handleIFrameMessage);
+          return () => {
+            window.removeEventListener("message", handleIFrameMessage);
+          };
+        }, []);
+  
+        return (
+          <iframe
+            ref={iframeRef}
+            src="https://selek01.github.io/kotiki2/"
+            style={{ width: "100%", height: "400px", border: "none" }}
+          />
+        );
+      }
+  
+      function App() {
+        return (
+          <div>
+            <h2>API Интеграция через iframe</h2>
+            <IFrameIntegration />
+          </div>
+        );
+      }
+  
+      // Монтируем React-приложение в контейнере #apiIntegration
+      ReactDOM.render(<App />, document.getElementById("apiIntegration"));
+    </script>
+  </body>
 </html>
